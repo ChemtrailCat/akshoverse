@@ -1,0 +1,1111 @@
+/*!
+ * AkshoLens PWA Theme v4.0 - "Horizon"
+ *
+ * Author: Akshoai (@Ale_Akishiro)
+ * License: MIT
+ *
+ * Inspired by:
+ * - BleachBunny's BunnyUI5 (horizontal layout, glassmorphism)
+ * - CurieOriginals (animations, particles, scroll-snap)
+ * - Technical analysis by Emi Akishiro (CTO)
+ *
+ * Major changes from v3.1:
+ * - NEW: Horizontal 2-column layout (sticky hero + scrollable content)
+ * - NEW: 12-column grid system for flexible layouts
+ * - NEW: Particle system (floating PWA badges)
+ * - NEW: 10+ CSS animations (pulse, glow, float, shimmer)
+ * - NEW: Glassmorphism depth panels (triple-layer)
+ * - NEW: Scroll-snap horizontal galleries
+ * - NEW: Advanced hover effects (image swap, scale, glow)
+ * - NEW: Gradient text for titles
+ * - NEW: Clip-path decorative elements
+ * - NEW: Reduced motion accessibility support
+ * - NEW: GPU acceleration hints
+ * - IMPROVED: Mobile-first responsive design
+ * - IMPROVED: Performance optimizations
+ */
+
+/* ========================================
+   CSS VARIABLES - Design Tokens
+   ======================================== */
+:root {
+  /* Background Colors */
+  --aksho-bg-0: #0f0818;
+  --aksho-bg-1: #1a0f1f;
+  --aksho-bg-2: #251832;
+
+  /* Text Colors */
+  --aksho-ink: #e9edf5;
+  --aksho-dim: rgba(233, 237, 245, 0.68);
+  --aksho-faint: rgba(233, 237, 245, 0.45);
+
+  /* Border & Line Colors */
+  --aksho-line: rgba(159, 122, 234, 0.14);
+  --aksho-line-2: rgba(159, 122, 234, 0.09);
+
+  /* PWA Brand Colors */
+  --aksho-purple: #9f7aea;
+  --aksho-purple-2: #7c54d8;
+  --aksho-sky: #7c9ff3;
+  --aksho-midnight: #4a3d8c;
+
+  /* Type System Colors */
+  --aksho-type-a: #7c9ff3;
+  --aksho-type-b: #22c55e;
+  --aksho-type-c: #dc2626;
+  --aksho-type-x: #4a5568;
+
+  /* Shadow */
+  --aksho-shadow: rgba(0, 0, 0, 0.45);
+
+  /* Typography */
+  --font-display: 'Anton', 'Rajdhani', sans-serif;
+  --font-header: 'Rajdhani', sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-stamp: 'Special Elite', cursive;
+  --font-mono: 'Courier Prime', monospace;
+
+  /* Sizing (fluid with clamp) */
+  --aksho-spacing: clamp(16px, 2vw, 24px);
+  --aksho-radius: 18px;
+}
+
+/* ========================================
+   GLOBAL RESETS & BASE STYLES
+   ======================================== */
+html, body {
+  overflow-x: hidden !important;
+  width: 100% !important;
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: var(--font-body) !important;
+}
+
+body,
+.ant-layout,
+.ant-layout-content {
+  background: var(--aksho-bg-0) !important;
+  color: var(--aksho-ink);
+}
+
+/* ========================================
+   LAYERED BACKGROUND SYSTEM
+   ======================================== */
+
+/* Layer 1: Base gradient */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(1200px 700px at 20% 10%, rgba(159, 122, 234, 0.18), transparent 60%),
+    radial-gradient(1000px 700px at 80% 25%, rgba(124, 159, 243, 0.12), transparent 55%),
+    linear-gradient(180deg, var(--aksho-bg-0) 0%, var(--aksho-bg-1) 45%, #050a12 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Layer 2: Dot grid overlay */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 3px 3px;
+  mix-blend-mode: overlay;
+  opacity: 0.22;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ========================================
+   PARTICLE SYSTEM - Floating PWA Badges
+   ======================================== */
+.aksho-particles {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.aksho-particle {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  font-family: var(--font-header);
+  font-size: calc(12px * var(--s));
+  font-weight: 700;
+  letter-spacing: 2px;
+  opacity: 0.08;
+  color: var(--aksho-purple);
+  text-shadow: 0 0 8px rgba(159, 122, 234, 0.3);
+  animation-duration: var(--d);
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+.aksho-particle.float {
+  animation-name: aksho-float;
+}
+
+.aksho-particle.pulse {
+  animation-name: aksho-pulse-opacity;
+}
+
+@keyframes aksho-float {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.06; }
+  50% { transform: translateY(-20px) scale(1.1); opacity: 0.12; }
+}
+
+@keyframes aksho-pulse-opacity {
+  0%, 100% { opacity: 0.04; transform: scale(1); }
+  50% { opacity: 0.12; transform: scale(1.15); }
+}
+
+/* ========================================
+   HIDE DEFAULT CHUB ELEMENTS
+   ======================================== */
+h1.ant-typography, h2.ant-typography, h3.ant-typography,
+h4.ant-typography, h5.ant-typography,
+:is(h1, h2, h3).ant-typography[class*=css-],
+.ant-col.text-left > .ant-typography,
+.ant-col.text-left > span.ant-typography,
+.anticon-lock, .anticon-unlock,
+.ant-ribbon.ant-ribbon-placement-end {
+  display: none !important;
+}
+
+.ant-typography.my-2,
+.text-sm.mb-2,
+.ant-space-item > .ant-tag.ant-tag-error,
+.ant-space-item > .ant-tag:has(.anticon-lock),
+.ant-space-item > .ant-tag:has(.anticon-unlock) {
+  display: none !important;
+}
+
+.ant-layout-header,
+.ant-menu-overflow.ant-menu.ant-menu-root.ant-menu-horizontal.ant-menu-dark {
+  background-color: transparent !important;
+}
+
+.msg-mkdn-container.font-size-message > :where(h1, h2, h3, p, blockquote, ul, ol, pre):not(:has(~ .aksho-page)) {
+  display: none !important;
+}
+
+/* ========================================
+   HORIZONTAL LAYOUT - Hero + Content
+   ======================================== */
+.aksho-page {
+  position: relative;
+  z-index: 5;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.aksho-band {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: 0;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Left column: Sticky Hero */
+.aksho-hero-column {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: var(--aksho-spacing);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.aksho-hero-image {
+  width: 100%;
+  height: auto;
+  max-height: 90vh;
+  object-fit: contain;
+  object-position: bottom center;
+  border-radius: var(--aksho-radius);
+  filter: drop-shadow(0 20px 50px rgba(0, 0, 0, 0.6));
+
+  /* Mask fade at bottom */
+  mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
+
+  /* Smooth entrance */
+  animation: aksho-hero-fade 1.2s cubic-bezier(0.25, 1, 0.5, 1) both;
+
+  /* Performance */
+  will-change: transform;
+  transform: translateZ(0);
+  pointer-events: auto;
+}
+
+@keyframes aksho-hero-fade {
+  0% { opacity: 0; transform: translateY(40px) scale(0.98); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Right column: Scrollable Content */
+.aksho-content-column {
+  padding: var(--aksho-spacing);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--aksho-spacing) * 1.5);
+}
+
+/* ========================================
+   TAGLINE SECTION
+   ======================================== */
+.aksho-tagline-section {
+  padding: calc(var(--aksho-spacing) * 2) 0;
+  text-align: center;
+  animation: aksho-fade-slide-up 0.8s cubic-bezier(0.25, 1, 0.5, 1) both;
+  animation-delay: 0.2s;
+}
+
+.aksho-character-name {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 8vw, 5.5rem);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  line-height: 1.1;
+  margin: 0 0 0.3em 0;
+  text-transform: uppercase;
+
+  /* Gradient text */
+  background: linear-gradient(180deg,
+    #ffffff 0%,
+    var(--aksho-ink) 35%,
+    var(--aksho-purple) 85%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+
+  /* Glow animation */
+  filter: drop-shadow(0 14px 34px rgba(0, 0, 0, 0.45));
+  animation: aksho-title-glow 4.8s ease-in-out infinite;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.3em;
+}
+
+@keyframes aksho-title-glow {
+  0%, 100% { filter: drop-shadow(0 14px 34px rgba(0, 0, 0, 0.45)); }
+  50% {
+    filter: drop-shadow(0 18px 50px rgba(159, 122, 234, 0.25))
+            drop-shadow(0 10px 30px rgba(124, 159, 243, 0.15));
+  }
+}
+
+.aksho-type-badge {
+  display: inline-block;
+  font-family: var(--font-header);
+  font-size: clamp(1.2rem, 3vw, 2rem);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 0.15em 0.5em;
+  border-radius: 999px;
+  border: 2px solid currentColor;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.aksho-type-badge.type-a { color: var(--aksho-type-a); }
+.aksho-type-badge.type-b { color: var(--aksho-type-b); }
+.aksho-type-badge.type-c { color: var(--aksho-type-c); }
+.aksho-type-badge.type-x { color: var(--aksho-type-x); }
+
+.aksho-character-subtitle {
+  font-family: var(--font-header);
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  font-weight: 600;
+  color: var(--aksho-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin: 0 0 1.5em 0;
+}
+
+.aksho-tagline-text {
+  font-size: clamp(0.95rem, 1.5vw, 1.1rem);
+  line-height: 1.8;
+  color: var(--aksho-dim);
+  margin: 0 0 1em 0;
+  max-width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.aksho-tagline-cta {
+  font-family: var(--font-header);
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  font-weight: 700;
+  color: var(--aksho-purple);
+  margin: 0;
+  letter-spacing: 0.05em;
+}
+
+/* ========================================
+   GLASSMORPHISM PANEL SYSTEM
+   ======================================== */
+.aksho-panel {
+  position: relative;
+  border-radius: var(--aksho-radius);
+  border: 1px solid var(--aksho-line);
+
+  /* Translucent gradient background */
+  background: linear-gradient(180deg,
+    rgba(255, 255, 255, 0.06) 0%,
+    rgba(255, 255, 255, 0.03) 100%
+  );
+
+  /* Glass blur */
+  backdrop-filter: blur(12px);
+
+  /* Depth shadow */
+  box-shadow: 0 20px 60px var(--aksho-shadow);
+
+  padding: calc(var(--aksho-spacing) * 1.5);
+  overflow: hidden;
+
+  /* Entrance animation */
+  animation: aksho-fade-slide-up 0.8s cubic-bezier(0.25, 1, 0.5, 1) both;
+}
+
+/* Layer 1: Accent gradient overlay */
+.aksho-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg,
+    rgba(159, 122, 234, 0.07),
+    transparent 42%,
+    rgba(124, 159, 243, 0.06)
+  );
+  opacity: 0.85;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Layer 2: Highlight layer */
+.aksho-panel::after {
+  content: "";
+  position: absolute;
+  left: -40%;
+  top: -50%;
+  width: 140%;
+  height: 140%;
+  background: radial-gradient(circle at 40% 40%,
+    rgba(255, 255, 255, 0.08),
+    transparent 55%
+  );
+  transform: rotate(8deg);
+  opacity: 0.55;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Content must be above pseudo-elements */
+.aksho-panel > * {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes aksho-fade-slide-up {
+  0% { opacity: 0; transform: translateY(30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* ========================================
+   SECTION HEADERS
+   ======================================== */
+.aksho-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: calc(var(--aksho-spacing) * 1.2);
+  gap: var(--aksho-spacing);
+}
+
+.aksho-section-title {
+  font-family: var(--font-header);
+  font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+  font-weight: 700;
+  color: var(--aksho-ink);
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  margin: 0;
+}
+
+.aksho-pulse-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--aksho-purple);
+  box-shadow: 0 0 0 0 rgba(159, 122, 234, 0.4);
+  animation: aksho-pulse-ring 1.9s ease-out infinite;
+}
+
+@keyframes aksho-pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(159, 122, 234, 0.4); }
+  70% { box-shadow: 0 0 0 16px rgba(159, 122, 234, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(159, 122, 234, 0); }
+}
+
+.aksho-section-divider {
+  height: 1px;
+  margin: calc(var(--aksho-spacing) * 1.5) 0;
+  background: linear-gradient(90deg,
+    transparent,
+    var(--aksho-purple) 20%,
+    var(--aksho-sky) 50%,
+    var(--aksho-purple) 80%,
+    transparent
+  );
+  opacity: 0.4;
+}
+
+/* ========================================
+   SCROLL-SNAP HORIZONTAL GALLERIES
+   ======================================== */
+.aksho-scroll-gallery {
+  display: flex;
+  gap: calc(var(--aksho-spacing) * 0.8);
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: var(--aksho-spacing) 4px calc(var(--aksho-spacing) * 1.5);
+
+  /* Scroll snap */
+  scroll-snap-type: x mandatory;
+
+  /* Custom scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(159, 122, 234, 0.4) rgba(0, 0, 0, 0.25);
+}
+
+.aksho-scroll-gallery::-webkit-scrollbar {
+  height: 6px;
+}
+
+.aksho-scroll-gallery::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 3px;
+}
+
+.aksho-scroll-gallery::-webkit-scrollbar-thumb {
+  background: rgba(159, 122, 234, 0.4);
+  border-radius: 3px;
+}
+
+.aksho-scroll-gallery::-webkit-scrollbar-thumb:hover {
+  background: rgba(159, 122, 234, 0.6);
+}
+
+/* Scroll hint indicator */
+.aksho-scroll-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: var(--aksho-dim);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-bottom: 12px;
+}
+
+.aksho-scroll-arrow {
+  font-size: 1.2em;
+  color: var(--aksho-purple);
+  animation: aksho-nudge 1.2s ease-in-out infinite;
+}
+
+.aksho-scroll-arrow:last-child {
+  animation-direction: reverse;
+}
+
+@keyframes aksho-nudge {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(5px); }
+}
+
+/* ========================================
+   SCENARIO CARDS
+   ======================================== */
+.aksho-scenario-card {
+  flex: 0 0 calc(33.333% - 14px);
+  min-width: 280px;
+  aspect-ratio: 2/3;
+  position: relative;
+  border-radius: var(--aksho-radius);
+  border: 1px solid var(--aksho-line);
+  background: rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+
+  /* Scroll snap */
+  scroll-snap-align: start;
+
+  /* Performance */
+  contain: content;
+
+  /* Smooth transitions */
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+              border-color 0.35s ease,
+              box-shadow 0.35s ease;
+}
+
+.aksho-scenario-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--aksho-purple);
+  box-shadow:
+    0 24px 70px rgba(0, 0, 0, 0.6),
+    0 0 30px rgba(159, 122, 234, 0.3),
+    0 0 0 1px rgba(159, 122, 234, 0.2);
+}
+
+/* Gradient overlay (always visible) */
+.aksho-scenario-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+    rgba(0, 0, 0, 0) 40%,
+    rgba(15, 8, 24, 0.9) 100%
+  );
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Glow effect (visible on hover) */
+.aksho-scenario-card::after {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  background:
+    radial-gradient(circle at 30% 35%, rgba(159, 122, 234, 0.2), transparent 55%),
+    radial-gradient(circle at 75% 60%, rgba(124, 159, 243, 0.15), transparent 60%);
+  opacity: 0;
+  filter: blur(20px);
+  transition: opacity 0.35s ease;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.aksho-scenario-card:hover::after {
+  opacity: 0.9;
+}
+
+.aksho-scenario-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  z-index: 0;
+
+  /* Performance */
+  transform: scale(1.02);
+  will-change: transform, filter;
+  transition: transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1),
+              filter 0.55s ease;
+}
+
+.aksho-scenario-card:hover .aksho-scenario-image {
+  transform: scale(1.08);
+  filter: saturate(1.1) contrast(1.05);
+}
+
+.aksho-scenario-num {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 3;
+  font-family: var(--font-header);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: var(--aksho-ink);
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--aksho-line);
+  backdrop-filter: blur(10px);
+}
+
+.aksho-scenario-pov {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 3;
+  font-family: var(--font-header);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--aksho-purple);
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(159, 122, 234, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.aksho-scenario-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 4;
+  padding: 16px;
+
+  /* Slide up on hover */
+  transform: translateY(15%);
+  transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.aksho-scenario-card:hover .aksho-scenario-overlay {
+  transform: translateY(0);
+}
+
+.aksho-scenario-line {
+  height: 2px;
+  margin: 0 auto 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  overflow: hidden;
+  width: 80%;
+}
+
+.aksho-scenario-line span {
+  display: block;
+  height: 100%;
+  width: 50%;
+  background: linear-gradient(90deg,
+    transparent,
+    var(--aksho-purple),
+    var(--aksho-sky),
+    transparent
+  );
+  transform: translateX(-120%);
+  animation: aksho-scan-line 2.8s ease-in-out infinite;
+}
+
+@keyframes aksho-scan-line {
+  0% { transform: translateX(-120%); }
+  60% { transform: translateX(140%); }
+  100% { transform: translateX(140%); }
+}
+
+.aksho-scenario-text {
+  margin: 0;
+  color: var(--aksho-ink);
+  font-size: 0.95rem;
+  line-height: 1.4;
+  font-weight: 600;
+  text-align: center;
+  text-shadow: 0 12px 28px rgba(0, 0, 0, 0.6);
+
+  /* Limit to 2 lines */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ========================================
+   CHARACTER CARDS (Grid)
+   ======================================== */
+.aksho-character-grid {
+  display: flex;
+  gap: calc(var(--aksho-spacing) * 0.8);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.aksho-character-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 220px;
+  padding: 14px;
+  border-radius: var(--aksho-radius);
+  border: 1px solid var(--aksho-line);
+  background: linear-gradient(180deg,
+    rgba(0, 0, 0, 0.3),
+    rgba(255, 255, 255, 0.03)
+  );
+  text-decoration: none;
+
+  /* Performance */
+  contain: content;
+
+  /* Smooth transitions */
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+              border-color 0.35s ease,
+              box-shadow 0.35s ease;
+}
+
+.aksho-character-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--aksho-sky);
+  box-shadow:
+    0 26px 70px rgba(0, 0, 0, 0.6),
+    0 0 30px rgba(124, 159, 243, 0.3),
+    0 0 0 1px rgba(124, 159, 243, 0.2);
+}
+
+.aksho-character-image-wrapper {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--aksho-line);
+}
+
+/* Bottom gradient overlay */
+.aksho-character-image-wrapper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+    transparent 50%,
+    rgba(15, 8, 24, 0.8) 100%
+  );
+  pointer-events: none;
+}
+
+.aksho-character-image {
+  width: 100%;
+  aspect-ratio: 2/3;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+
+  /* Performance */
+  transform: scale(1.02);
+  will-change: transform, filter;
+  transition: transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1),
+              filter 0.55s ease;
+}
+
+.aksho-character-card:hover .aksho-character-image {
+  transform: scale(1.07);
+  filter: saturate(1.08) contrast(1.04);
+}
+
+.aksho-character-type-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  font-family: var(--font-header);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  border: 1px solid currentColor;
+}
+
+.aksho-character-type-badge.type-a { color: var(--aksho-type-a); }
+.aksho-character-type-badge.type-b { color: var(--aksho-type-b); }
+.aksho-character-type-badge.type-c { color: var(--aksho-type-c); }
+.aksho-character-type-badge.type-x { color: var(--aksho-type-x); }
+
+.aksho-character-info {
+  text-align: center;
+}
+
+.aksho-character-name {
+  font-family: var(--font-header);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--aksho-ink);
+  letter-spacing: 0.05em;
+  margin: 0 0 0.3em 0;
+}
+
+.aksho-character-tagline {
+  font-size: 0.85rem;
+  color: var(--aksho-dim);
+  margin: 0;
+}
+
+/* ========================================
+   TYPE SYSTEM DISPLAY
+   ======================================== */
+.aksho-type-system {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--aksho-spacing) * 0.8);
+}
+
+.aksho-type-row {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.aksho-type-label {
+  flex-shrink: 0;
+  font-family: var(--font-header);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 2px solid currentColor;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.aksho-type-label.type-a { color: var(--aksho-type-a); }
+.aksho-type-label.type-b { color: var(--aksho-type-b); }
+.aksho-type-label.type-c { color: var(--aksho-type-c); }
+.aksho-type-label.type-x { color: var(--aksho-type-x); }
+
+.aksho-type-description {
+  flex: 1;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--aksho-dim);
+}
+
+.aksho-type-description strong {
+  color: var(--aksho-ink);
+  font-weight: 700;
+}
+
+/* ========================================
+   CTA & CREDIT SECTIONS
+   ======================================== */
+.aksho-cta-section {
+  text-align: center;
+  padding: calc(var(--aksho-spacing) * 2) 0;
+}
+
+.aksho-cta-text {
+  font-family: var(--font-header);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  color: var(--aksho-purple);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin: 0 0 0.5em 0;
+}
+
+.aksho-cta-subtext {
+  font-size: 1rem;
+  color: var(--aksho-dim);
+  margin: 0;
+}
+
+.aksho-credit-box {
+  padding: calc(var(--aksho-spacing) * 1.5);
+  border-radius: var(--aksho-radius);
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--aksho-line);
+  text-align: center;
+}
+
+.aksho-credit-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 2px solid var(--aksho-purple);
+  object-fit: cover;
+}
+
+.aksho-credit-text {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--aksho-dim);
+  margin: 0;
+}
+
+.aksho-credit-link {
+  color: var(--aksho-purple);
+  text-decoration: none;
+  font-weight: 700;
+  transition: color 0.2s ease;
+}
+
+.aksho-credit-link:hover {
+  color: var(--aksho-sky);
+  text-decoration: underline;
+}
+
+/* ========================================
+   CHUB.AI BUTTON OVERRIDES
+   ======================================== */
+button.ant-btn {
+  font-weight: 700 !important;
+  border-radius: 999px !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: var(--aksho-ink) !important;
+  border: 1px solid var(--aksho-line) !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4) !important;
+  transition: transform 0.25s ease, box-shadow 0.25s ease,
+              border-color 0.25s ease, background 0.25s ease !important;
+}
+
+button.ant-btn:hover {
+  transform: translateY(-2px) !important;
+  background: rgba(159, 122, 234, 0.12) !important;
+  border-color: rgba(159, 122, 234, 0.4) !important;
+  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.5),
+              0 0 0 1px rgba(159, 122, 234, 0.15) !important;
+}
+
+/* Primary CTA buttons (chat/message) */
+button.ant-btn:has(svg.lucide-messages-square),
+button.ant-btn:has(svg.lucide-message-square) {
+  font-size: 16px !important;
+  height: 56px !important;
+  padding: 0 2.5em !important;
+  background: var(--aksho-purple) !important;
+  border: none !important;
+  color: #0f0818 !important;
+  font-weight: 800 !important;
+}
+
+button.ant-btn:has(svg.lucide-messages-square):hover,
+button.ant-btn:has(svg.lucide-message-square):hover {
+  background: var(--aksho-sky) !important;
+  box-shadow: 0 26px 80px rgba(0, 0, 0, 0.6),
+              0 0 35px rgba(124, 159, 243, 0.4) !important;
+}
+
+/* ========================================
+   RESPONSIVE DESIGN - Mobile First
+   ======================================== */
+
+/* Tablet: Switch to single column */
+@media (max-width: 768px) {
+  .aksho-band {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .aksho-hero-column {
+    position: relative;
+    height: auto;
+    max-height: 60vh;
+  }
+
+  .aksho-hero-image {
+    max-height: 60vh;
+  }
+
+  .aksho-tagline-section {
+    padding: calc(var(--aksho-spacing) * 1.5) 0;
+  }
+
+  .aksho-character-name {
+    font-size: clamp(2rem, 10vw, 3.5rem);
+  }
+
+  .aksho-scenario-card {
+    flex: 0 0 calc(50% - 10px);
+    min-width: 200px;
+  }
+
+  .aksho-character-card {
+    width: 180px;
+  }
+}
+
+/* Mobile: Further optimizations */
+@media (max-width: 480px) {
+  .aksho-hero-column {
+    max-height: 50vh;
+  }
+
+  .aksho-hero-image {
+    max-height: 50vh;
+  }
+
+  .aksho-character-name {
+    font-size: clamp(1.8rem, 12vw, 2.8rem);
+    letter-spacing: 0.05em;
+  }
+
+  .aksho-scenario-card {
+    flex: 0 0 calc(50% - 8px);
+    min-width: 160px;
+  }
+
+  .aksho-character-card {
+    width: 160px;
+  }
+
+  .aksho-panel {
+    padding: var(--aksho-spacing);
+  }
+}
+
+/* ========================================
+   ACCESSIBILITY - Reduced Motion
+   ======================================== */
+@media (prefers-reduced-motion: reduce) {
+  /* Disable all animations */
+  .aksho-hero-image,
+  .aksho-character-name,
+  .aksho-tagline-section,
+  .aksho-panel,
+  .aksho-particle,
+  .aksho-pulse-indicator,
+  .aksho-scroll-arrow,
+  .aksho-scenario-line span,
+  * {
+    animation: none !important;
+  }
+
+  /* Disable all transitions */
+  .aksho-scenario-card,
+  .aksho-character-card,
+  .aksho-scenario-image,
+  .aksho-character-image,
+  .aksho-scenario-overlay,
+  * {
+    transition: none !important;
+  }
+
+  /* Keep transforms static */
+  .aksho-scenario-overlay {
+    transform: none !important;
+  }
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+.aksho-text-center { text-align: center; }
+.aksho-text-muted { color: var(--aksho-dim); }
+.aksho-text-faint { color: var(--aksho-faint); }
+.aksho-mb-0 { margin-bottom: 0; }
+.aksho-mb-1 { margin-bottom: calc(var(--aksho-spacing) * 0.5); }
+.aksho-mb-2 { margin-bottom: var(--aksho-spacing); }
+.aksho-mt-2 { margin-top: var(--aksho-spacing); }
+
+/* ========================================
+   END OF AKSHOLENS v4.0
+   ======================================== */
