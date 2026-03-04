@@ -1,0 +1,550 @@
+/* ============================================================
+   JASMINE THANAN — SIAMESE WHISPER THEME
+   Bangkok Hotel Elegance x Predator Aesthetic
+   Author: chemtrailcat | Version: 1.0
+   Repo: https://github.com/ChemtrailCat/akshoverse
+   ============================================================ */
+
+
+/* ============================================================
+   ROOT VARIABLES
+   ============================================================ */
+
+:root {
+  /* Gold palette */
+  --jas-gold:          #d4a853;
+  --jas-gold-dark:     #b8860b;
+  --jas-gold-light:    #f5d78e;
+  --jas-gold-glow:     rgba(212, 168, 83, 0.25);
+  --jas-gold-subtle:   rgba(212, 168, 83, 0.10);
+  --jas-border:        rgba(212, 168, 83, 0.22);
+  --jas-border-hover:  rgba(212, 168, 83, 0.55);
+
+  /* Backgrounds */
+  --jas-bg:            #0a0a0a;
+  --jas-card-bg:       rgba(16, 16, 16, 0.80);
+  --jas-card-bg-solid: #111111;
+
+  /* Text */
+  --jas-text:          #e8e8e8;
+  --jas-text-sub:      #a0a0a0;
+  --jas-text-muted:    #666666;
+
+  /* Fonts */
+  --font-display: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --font-ui:      'Josefin Sans', 'Segoe UI', sans-serif;
+  --font-body:    'Inter', 'Segoe UI', Helvetica, sans-serif;
+
+  /* Spacing */
+  --sp-xs:  8px;
+  --sp-sm:  14px;
+  --sp-md:  24px;
+  --sp-lg:  40px;
+  --sp-xl:  64px;
+
+  /* Radii */
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 22px;
+}
+
+
+/* ============================================================
+   CHUB.AI OVERRIDES
+   ============================================================ */
+
+/* Hide Chub's default title block */
+h3.ant-typography,
+h5.ant-typography,
+h4.ant-typography.mt-8,
+h4.ant-typography.mt-8 + div {
+  display: none !important;
+}
+
+/* Hide ribbon */
+.ant-ribbon,
+.ant-ribbon-wrapper > .ant-ribbon {
+  display: none !important;
+}
+
+/* Soften avatar corners */
+.ant-image-img {
+  border-radius: 12px !important;
+}
+
+
+/* ============================================================
+   BACKGROUND — DARK HOTEL ROOM WITH CITY LIGHT BLEED
+   ============================================================ */
+
+body,
+.ant-layout,
+.ant-layout-content {
+  background: var(--jas-bg) !important;
+}
+
+/* Ambient gold glow — like Bangkok city lights bleeding through curtains */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 55% 40% at 12% 88%, rgba(212, 168, 83, 0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 45% 35% at 88% 12%, rgba(184, 134, 11, 0.05) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 50% at 50% 100%, rgba(212, 168, 83, 0.04) 0%, transparent 55%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+
+/* ============================================================
+   MAIN WRAPPER
+   ============================================================ */
+
+.jasmine-wrapper {
+  position: relative;
+  max-width: 740px;
+  margin: 0 auto;
+  padding: var(--sp-lg) var(--sp-md);
+  font-family: var(--font-body);
+  color: var(--jas-text);
+  z-index: 1;
+}
+
+
+/* ============================================================
+   HEADER — SCAN LINE EFFECT
+   ============================================================ */
+
+.jasmine-header {
+  position: relative;
+  text-align: center;
+  padding: var(--sp-xl) var(--sp-lg) var(--sp-lg);
+  margin-bottom: var(--sp-lg);
+  overflow: hidden;
+}
+
+/* Bottom divider line */
+.jasmine-header::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 8%;
+  right: 8%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--jas-gold), transparent);
+  opacity: 0.45;
+}
+
+/* The scan line — hotel key card reader, slow and methodical */
+@keyframes jasScan {
+  0%   { transform: translateY(-200%); opacity: 0; }
+  10%  { opacity: 0.75; }
+  90%  { opacity: 0.75; }
+  100% { transform: translateY(1800%); opacity: 0; }
+}
+
+.jasmine-header::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent        0%,
+    var(--jas-gold-light) 20%,
+    var(--jas-gold)    50%,
+    var(--jas-gold-light) 80%,
+    transparent        100%
+  );
+  box-shadow:
+    0 0 10px rgba(212, 168, 83, 0.6),
+    0 0 3px  rgba(212, 168, 83, 0.4);
+  animation: jasScan 9s ease-in-out infinite;
+  animation-delay: 2s;
+  pointer-events: none;
+}
+
+
+/* ============================================================
+   HEADER TYPOGRAPHY
+   ============================================================ */
+
+.jasmine-universe {
+  font-family: var(--font-ui);
+  font-size: 0.72em;
+  font-weight: 600;
+  color: var(--jas-gold);
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  margin: 0 0 var(--sp-sm);
+}
+
+/* Character name — animated gold shimmer */
+@keyframes jasGoldShimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.jasmine-name {
+  font-family: var(--font-display);
+  font-size: clamp(2.6em, 8vw, 4.8em);
+  font-weight: 300;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1.05;
+  margin: 0 0 var(--sp-xs);
+  background: linear-gradient(
+    90deg,
+    var(--jas-gold-dark)  0%,
+    var(--jas-gold)       25%,
+    var(--jas-gold-light) 50%,
+    var(--jas-gold)       75%,
+    var(--jas-gold-dark)  100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: jasGoldShimmer 5s linear infinite;
+}
+
+.jasmine-subtitle {
+  font-family: var(--font-display);
+  font-size: 1.1em;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--jas-text-sub);
+  letter-spacing: 0.1em;
+  margin: 0 0 var(--sp-md);
+}
+
+/* Typewriter CTA */
+@keyframes jasTyping {
+  to { max-width: 55ch; }
+}
+
+@keyframes jasBlinkCursor {
+  0%, 100% { border-color: var(--jas-gold); }
+  50%       { border-color: transparent; }
+}
+
+.jasmine-cta-wrap {
+  text-align: center;
+  margin-top: var(--sp-sm);
+}
+
+.jasmine-cta {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: 1.1em;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--jas-gold);
+  letter-spacing: 0.04em;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 0;
+  border-right: 2px solid var(--jas-gold);
+  vertical-align: bottom;
+  animation:
+    jasTyping     3.5s steps(52, end) 3s   forwards,
+    jasBlinkCursor 0.8s step-end      3s   infinite;
+}
+
+/* Disable typewriter on narrow screens — just show the text */
+@media (max-width: 560px) {
+  .jasmine-cta {
+    display: block;
+    max-width: none;
+    white-space: normal;
+    border-right: none;
+    animation: none;
+  }
+}
+
+
+/* ============================================================
+   CARDS — GLASSMORPHISM BASE
+   ============================================================ */
+
+.jasmine-card {
+  background: var(--jas-card-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--jas-border);
+  border-radius: var(--r-md);
+  padding: var(--sp-lg);
+  margin-bottom: var(--sp-md);
+  box-shadow:
+    0 4px 28px rgba(0, 0, 0, 0.5),
+    0 1px 0 rgba(255, 255, 255, 0.025) inset;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.jasmine-card:hover {
+  border-color: rgba(212, 168, 83, 0.38);
+}
+
+/* Tagline card — breathing predator pulse on the left border */
+@keyframes jasPredatorPulse {
+  0%, 100% {
+    box-shadow:
+      0 4px 28px rgba(0, 0, 0, 0.5),
+      -4px 0 12px rgba(212, 168, 83, 0.05);
+  }
+  50% {
+    box-shadow:
+      0 4px 28px rgba(0, 0, 0, 0.5),
+      -4px 0 22px rgba(212, 168, 83, 0.20);
+  }
+}
+
+.jasmine-card--tagline {
+  border-left: 3px solid var(--jas-gold);
+  animation: jasPredatorPulse 4.5s ease-in-out infinite;
+}
+
+.jasmine-card--tagline:hover {
+  border-color: var(--jas-gold);
+}
+
+
+/* ============================================================
+   SECTION LABELS
+   ============================================================ */
+
+.jasmine-section-label {
+  font-family: var(--font-ui);
+  font-size: 0.68em;
+  font-weight: 700;
+  color: var(--jas-gold);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  margin: 0 0 var(--sp-md);
+  padding-bottom: var(--sp-xs);
+  border-bottom: 1px solid rgba(212, 168, 83, 0.18);
+}
+
+
+/* ============================================================
+   TAGLINE CARD — TEXT
+   ============================================================ */
+
+.jasmine-tagline-text {
+  font-family: var(--font-body);
+  font-size: 0.95em;
+  line-height: 1.85;
+  color: var(--jas-text);
+  margin: 0 0 var(--sp-sm);
+}
+
+.jasmine-tagline-text + .jasmine-tagline-text {
+  color: rgba(232, 232, 232, 0.72);
+}
+
+.jasmine-tagline-text:last-of-type {
+  margin-bottom: 0;
+}
+
+.jasmine-tagline-hook {
+  font-family: var(--font-display);
+  font-size: 1.15em;
+  font-weight: 500;
+  font-style: italic;
+  color: var(--jas-gold);
+  text-align: center;
+  margin: var(--sp-md) 0 0;
+}
+
+
+/* ============================================================
+   SCENARIOS — HOVER SLIDE
+   ============================================================ */
+
+.jasmine-scenarios {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.jasmine-scenario {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-sm);
+  padding: 11px var(--sp-sm);
+  background: rgba(212, 168, 83, 0.025);
+  border-radius: var(--r-sm);
+  border-left: 3px solid transparent;
+  cursor: default;
+  transition:
+    transform      0.22s ease,
+    border-color   0.22s ease,
+    background     0.22s ease,
+    padding-left   0.22s ease;
+}
+
+.jasmine-scenario:hover {
+  transform: translateX(6px);
+  border-left-color: var(--jas-gold);
+  background: rgba(212, 168, 83, 0.065);
+  padding-left: 18px;
+}
+
+/* Scenario badge */
+.jasmine-badge {
+  flex-shrink: 0;
+  font-family: var(--font-ui);
+  font-size: 0.62em;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 3px;
+  line-height: 1.6;
+}
+
+.jasmine-badge--default {
+  background: var(--jas-gold);
+  color: #000;
+}
+
+.jasmine-badge--alt {
+  background: rgba(212, 168, 83, 0.10);
+  color: var(--jas-gold);
+  border: 1px solid rgba(212, 168, 83, 0.28);
+}
+
+.jasmine-scenario-text {
+  font-family: var(--font-body);
+  font-size: 0.88em;
+  color: var(--jas-text);
+  line-height: 1.55;
+}
+
+
+/* ============================================================
+   BODY TEXT (Author Note, etc.)
+   ============================================================ */
+
+.jasmine-body-text {
+  font-family: var(--font-body);
+  font-size: 0.92em;
+  line-height: 1.8;
+  color: rgba(232, 232, 232, 0.82);
+  margin: 0 0 var(--sp-sm);
+}
+
+.jasmine-body-text:last-child {
+  margin-bottom: 0;
+}
+
+.jasmine-body-text strong {
+  color: var(--jas-text);
+  font-weight: 600;
+}
+
+
+/* ============================================================
+   META ROWS (Content / Genre / POV etc.)
+   ============================================================ */
+
+.jasmine-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.jasmine-meta-row {
+  display: flex;
+  gap: var(--sp-sm);
+  font-size: 0.88em;
+  line-height: 1.65;
+}
+
+.jasmine-meta-label {
+  flex-shrink: 0;
+  min-width: 76px;
+  font-family: var(--font-ui);
+  font-size: 0.72em;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--jas-gold);
+  padding-top: 3px;
+}
+
+.jasmine-meta-value {
+  font-family: var(--font-body);
+  color: var(--jas-text-sub);
+}
+
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
+.jasmine-footer {
+  text-align: center;
+  padding-top: var(--sp-lg);
+  border-top: 1px solid rgba(212, 168, 83, 0.12);
+  font-family: var(--font-body);
+  font-size: 0.8em;
+  color: var(--jas-text-muted);
+}
+
+.jasmine-footer p {
+  margin: 0 0 6px;
+}
+
+.jasmine-footer p:last-child {
+  margin: 0;
+  font-style: italic;
+}
+
+.jasmine-footer a {
+  color: var(--jas-gold);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.jasmine-footer a:hover {
+  color: var(--jas-gold-light);
+}
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 600px) {
+  .jasmine-wrapper {
+    padding: var(--sp-md) var(--sp-sm);
+  }
+
+  .jasmine-header {
+    padding: var(--sp-lg) var(--sp-sm) var(--sp-md);
+  }
+
+  .jasmine-card {
+    padding: var(--sp-md);
+  }
+
+  .jasmine-name {
+    letter-spacing: 0.07em;
+  }
+
+  .jasmine-meta-row {
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .jasmine-meta-label {
+    min-width: unset;
+  }
+}
