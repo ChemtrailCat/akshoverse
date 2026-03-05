@@ -1,8 +1,10 @@
 /* ============================================================
    JASMINE THANAN — SIAMESE WHISPER THEME
    Bangkok Hotel Elegance x Predator Aesthetic
-   Author: chemtrailcat | Version: 1.0
+   Author: chemtrailcat | Version: 2.0
    Repo: https://github.com/ChemtrailCat/akshoverse
+   v2.0: +hero image layer, +animated ambient glow,
+         +film grain overlay, +entrance animations
    ============================================================ */
 
 
@@ -24,6 +26,9 @@
   --jas-bg:            #0a0a0a;
   --jas-card-bg:       rgba(16, 16, 16, 0.80);
   --jas-card-bg-solid: #111111;
+
+  /* Hero image (set per-card via one-liner override) */
+  --jas-hero-img:      none;
 
   /* Text */
   --jas-text:          #e8e8e8;
@@ -83,17 +88,38 @@ body,
   background: var(--jas-bg) !important;
 }
 
-/* Ambient gold glow — like Bangkok city lights bleeding through curtains */
+/* ── LAYER 1: Hero image (behind everything) ── */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: var(--jas-hero-img, none);
+  background-size: cover;
+  background-position: center 20%;
+  background-attachment: fixed;
+  opacity: 0.28;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── LAYER 2: Animated ambient glow (city lights breathing) ── */
+@keyframes jasAmbientBreath {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+
 body::before {
   content: "";
   position: fixed;
   inset: 0;
   background:
-    radial-gradient(ellipse 55% 40% at 12% 88%, rgba(212, 168, 83, 0.07) 0%, transparent 60%),
-    radial-gradient(ellipse 45% 35% at 88% 12%, rgba(184, 134, 11, 0.05) 0%, transparent 55%),
-    radial-gradient(ellipse 70% 50% at 50% 100%, rgba(212, 168, 83, 0.04) 0%, transparent 55%);
+    radial-gradient(ellipse 55% 40% at 12% 88%, rgba(212, 168, 83, 0.10) 0%, transparent 60%),
+    radial-gradient(ellipse 45% 35% at 88% 12%, rgba(184, 134, 11, 0.07) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 50% at 50% 100%, rgba(212, 168, 83, 0.06) 0%, transparent 55%),
+    radial-gradient(ellipse 30% 25% at 65% 35%, rgba(100, 140, 200, 0.04) 0%, transparent 50%);
   pointer-events: none;
-  z-index: 0;
+  z-index: 1;
+  animation: jasAmbientBreath 10s ease-in-out infinite;
 }
 
 
@@ -108,7 +134,70 @@ body::before {
   padding: var(--sp-lg) var(--sp-md);
   font-family: var(--font-body);
   color: var(--jas-text);
-  z-index: 1;
+  z-index: 2;
+}
+
+/* ── LAYER 3: Film grain overlay (subtle texture across all content) ── */
+@keyframes jasGrain {
+  0%   { transform: translate(0,   0);   }
+  10%  { transform: translate(-2%, -3%); }
+  20%  { transform: translate(1%,   2%); }
+  30%  { transform: translate(-1%,  1%); }
+  40%  { transform: translate(3%,  -2%); }
+  50%  { transform: translate(-1%, -1%); }
+  60%  { transform: translate(2%,   3%); }
+  70%  { transform: translate(-3%,  1%); }
+  80%  { transform: translate(1%,  -2%); }
+  90%  { transform: translate(-2%,  2%); }
+  100% { transform: translate(2%,  -1%); }
+}
+
+.jasmine-wrapper::before {
+  content: "";
+  position: fixed;
+  inset: -10%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 300px 300px;
+  opacity: 0.032;
+  pointer-events: none;
+  z-index: 9998;
+  animation: jasGrain 0.18s steps(1, end) infinite;
+}
+
+
+/* ============================================================
+   ENTRANCE ANIMATIONS
+   ============================================================ */
+
+@keyframes jasFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.jasmine-universe {
+  animation: jasFadeUp 0.7s ease 0.2s both;
+}
+
+/* Name: shimmer starts at 1.5s (after fade-in completes at ~1.4s) */
+.jasmine-name {
+  animation:
+    jasGoldShimmer 5s linear 1.5s infinite,
+    jasFadeUp      0.8s ease  0.5s both;
+}
+
+.jasmine-subtitle {
+  animation: jasFadeUp 0.7s ease 0.9s both;
+}
+
+.jasmine-cta-wrap {
+  animation: jasFadeUp 0.7s ease 1.3s both;
 }
 
 
@@ -153,11 +242,11 @@ body::before {
   height: 2px;
   background: linear-gradient(
     90deg,
-    transparent        0%,
+    transparent           0%,
     var(--jas-gold-light) 20%,
-    var(--jas-gold)    50%,
+    var(--jas-gold)       50%,
     var(--jas-gold-light) 80%,
-    transparent        100%
+    transparent           100%
   );
   box-shadow:
     0 0 10px rgba(212, 168, 83, 0.6),
@@ -172,6 +261,7 @@ body::before {
    HEADER TYPOGRAPHY
    ============================================================ */
 
+/* .jasmine-universe — styles only (animation applied above) */
 .jasmine-universe {
   font-family: var(--font-ui);
   font-size: 0.72em;
@@ -182,7 +272,7 @@ body::before {
   margin: 0 0 var(--sp-sm);
 }
 
-/* Character name — animated gold shimmer */
+/* Character name — animated gold shimmer (animation applied above) */
 @keyframes jasGoldShimmer {
   0%   { background-position: -200% center; }
   100% { background-position: 200% center; }
@@ -208,9 +298,10 @@ body::before {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: jasGoldShimmer 5s linear infinite;
+  /* animation — see ENTRANCE ANIMATIONS block above */
 }
 
+/* .jasmine-subtitle — styles only (animation applied above) */
 .jasmine-subtitle {
   font-family: var(--font-display);
   font-size: 1.1em;
@@ -234,6 +325,7 @@ body::before {
 .jasmine-cta-wrap {
   text-align: center;
   margin-top: var(--sp-sm);
+  /* animation — see ENTRANCE ANIMATIONS block above */
 }
 
 .jasmine-cta {
@@ -250,8 +342,8 @@ body::before {
   border-right: 2px solid var(--jas-gold);
   vertical-align: bottom;
   animation:
-    jasTyping     3.5s steps(52, end) 3s   forwards,
-    jasBlinkCursor 0.8s step-end      3s   infinite;
+    jasTyping      3.5s steps(52, end) 3s   forwards,
+    jasBlinkCursor 0.8s step-end       3s   infinite;
 }
 
 /* Disable typewriter on narrow screens — just show the text */
@@ -546,5 +638,10 @@ body::before {
 
   .jasmine-meta-label {
     min-width: unset;
+  }
+
+  /* Disable grain on mobile — performance */
+  .jasmine-wrapper::before {
+    display: none;
   }
 }
