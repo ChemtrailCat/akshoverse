@@ -1,10 +1,12 @@
 /* ============================================================
    JASMINE THANAN — SIAMESE WHISPER THEME
    Bangkok Hotel Elegance x Predator Aesthetic
-   Author: chemtrailcat | Version: 2.0
+   Author: chemtrailcat | Version: 3.0
    Repo: https://github.com/ChemtrailCat/akshoverse
    v2.0: +hero image layer, +animated ambient glow,
          +film grain overlay, +entrance animations
+   v3.0: layout reorder, two-col, meta-bar, button styles,
+         avatar shimmer, 50% desktop card sizing
    ============================================================ */
 
 
@@ -72,9 +74,78 @@ h4.ant-typography.mt-8 + div {
   display: none !important;
 }
 
-/* Soften avatar corners */
+/* Avatar base — rounded corners */
 .ant-image-img {
   border-radius: 12px !important;
+  transition: transform 0.3s ease, box-shadow 0.4s ease !important;
+}
+
+/* Avatar hover — gold shimmer glow */
+@keyframes jasAvatarGlow {
+  0%, 100% {
+    box-shadow:
+      0 0 0 2px var(--jas-gold-dark),
+      0 0 12px rgba(212, 168, 83, 0.22);
+  }
+  50% {
+    box-shadow:
+      0 0 0 2px var(--jas-gold-light),
+      0 0 28px rgba(245, 215, 142, 0.55),
+      0 0 8px  rgba(212, 168, 83, 0.30);
+  }
+}
+
+.ant-image-img:hover {
+  transform: scale(1.02) !important;
+  animation: jasAvatarGlow 1.8s ease-in-out infinite !important;
+}
+
+
+/* ============================================================
+   CHUB ACTION BUTTONS — Gold theme, black icon/text
+   Targeted via stable icon classes using :has()
+   ============================================================ */
+
+button:has(.lucide-messages-square),
+button:has(.anticon-upload),
+button:has(.anticon-download) {
+  background: var(--jas-gold) !important;
+  border-color: var(--jas-gold-dark) !important;
+  color: #000 !important;
+  font-family: var(--font-ui) !important;
+  font-weight: 600 !important;
+  border-radius: var(--r-sm) !important;
+  transition:
+    background  0.25s ease,
+    box-shadow  0.25s ease,
+    transform   0.15s ease !important;
+}
+
+/* Icon + text colour */
+button:has(.lucide-messages-square) *,
+button:has(.anticon-upload) *,
+button:has(.anticon-download) * {
+  color: #000 !important;
+  fill: currentColor !important;
+}
+
+/* Hover: lighter gold + glow */
+button:has(.lucide-messages-square):hover,
+button:has(.anticon-upload):hover,
+button:has(.anticon-download):hover {
+  background: var(--jas-gold-light) !important;
+  border-color: var(--jas-gold) !important;
+  box-shadow:
+    0 0 18px rgba(212, 168, 83, 0.55),
+    0 2px  8px rgba(0, 0, 0, 0.25) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* "Chat with" — slightly taller, larger font to stand out */
+button:has(.lucide-messages-square) {
+  padding-top:    10px !important;
+  padding-bottom: 10px !important;
+  font-size: 1.06em !important;
 }
 
 
@@ -88,7 +159,7 @@ body,
   background: var(--jas-bg) !important;
 }
 
-/* ── LAYER 1: Hero image (behind everything) ── */
+/* ── LAYER 1: Hero image (deepest — behind everything) ── */
 body::after {
   content: "";
   position: fixed;
@@ -137,9 +208,9 @@ body::before {
   z-index: 2;
 }
 
-/* ── LAYER 3: Film grain overlay (subtle texture across all content) ── */
+/* ── LAYER 3: Film grain overlay ── */
 @keyframes jasGrain {
-  0%   { transform: translate(0,   0);   }
+  0%   { transform: translate(0,    0);   }
   10%  { transform: translate(-2%, -3%); }
   20%  { transform: translate(1%,   2%); }
   30%  { transform: translate(-1%,  1%); }
@@ -185,7 +256,7 @@ body::before {
   animation: jasFadeUp 0.7s ease 0.2s both;
 }
 
-/* Name: shimmer starts at 1.5s (after fade-in completes at ~1.4s) */
+/* Name: shimmer starts at 1.5s (after fade-in completes ~1.4s) */
 .jasmine-name {
   animation:
     jasGoldShimmer 5s linear 1.5s infinite,
@@ -261,7 +332,7 @@ body::before {
    HEADER TYPOGRAPHY
    ============================================================ */
 
-/* .jasmine-universe — styles only (animation applied above) */
+/* .jasmine-universe — animation applied in ENTRANCE ANIMATIONS */
 .jasmine-universe {
   font-family: var(--font-ui);
   font-size: 0.72em;
@@ -272,7 +343,7 @@ body::before {
   margin: 0 0 var(--sp-sm);
 }
 
-/* Character name — animated gold shimmer (animation applied above) */
+/* Character name — gold shimmer + fade-up (animations in ENTRANCE block) */
 @keyframes jasGoldShimmer {
   0%   { background-position: -200% center; }
   100% { background-position: 200% center; }
@@ -298,10 +369,10 @@ body::before {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  /* animation — see ENTRANCE ANIMATIONS block above */
+  /* animation — see ENTRANCE ANIMATIONS block */
 }
 
-/* .jasmine-subtitle — styles only (animation applied above) */
+/* .jasmine-subtitle — animation applied in ENTRANCE ANIMATIONS */
 .jasmine-subtitle {
   font-family: var(--font-display);
   font-size: 1.1em;
@@ -322,10 +393,10 @@ body::before {
   50%       { border-color: transparent; }
 }
 
+/* .jasmine-cta-wrap — animation applied in ENTRANCE ANIMATIONS */
 .jasmine-cta-wrap {
   text-align: center;
   margin-top: var(--sp-sm);
-  /* animation — see ENTRANCE ANIMATIONS block above */
 }
 
 .jasmine-cta {
@@ -346,7 +417,7 @@ body::before {
     jasBlinkCursor 0.8s step-end       3s   infinite;
 }
 
-/* Disable typewriter on narrow screens — just show the text */
+/* Disable typewriter on narrow screens */
 @media (max-width: 560px) {
   .jasmine-cta {
     display: block;
@@ -354,6 +425,82 @@ body::before {
     white-space: normal;
     border-right: none;
     animation: none;
+  }
+}
+
+
+/* ============================================================
+   STANDALONE HOOK LINE
+   Appears above the content meta-bar (moved out of tagline card)
+   ============================================================ */
+
+.jasmine-hook-standalone {
+  font-family: var(--font-display);
+  font-size: 1.25em;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--jas-gold);
+  text-align: center;
+  margin: 0 0 var(--sp-md);
+  letter-spacing: 0.04em;
+  opacity: 0.9;
+}
+
+
+/* ============================================================
+   CONTENT META-BAR
+   Compact card — all tags on one horizontal line with · separators
+   ============================================================ */
+
+.jasmine-card--meta-bar {
+  padding: var(--sp-md) var(--sp-lg);
+  margin-bottom: var(--sp-md);
+}
+
+.jasmine-meta-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+  margin-top: var(--sp-xs);
+}
+
+.jasmine-meta-tag {
+  font-family: var(--font-body);
+  font-size: 0.82em;
+  color: var(--jas-text-sub);
+  white-space: nowrap;
+}
+
+.jasmine-meta-dot {
+  color: var(--jas-gold);
+  opacity: 0.55;
+  font-size: 0.9em;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+
+/* ============================================================
+   TWO-COLUMN ROW
+   Author's Note + Bot Info side by side on desktop
+   ============================================================ */
+
+.jasmine-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-md);
+  margin-bottom: var(--sp-md);
+}
+
+/* Cards inside the two-col retain their base style */
+.jasmine-two-col .jasmine-card {
+  margin-bottom: 0;
+}
+
+@media (max-width: 680px) {
+  .jasmine-two-col {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -376,31 +523,39 @@ body::before {
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
+/* Desktop: 50% larger card padding */
+@media (min-width: 601px) {
+  .jasmine-card {
+    padding: 60px;
+  }
+
+  /* Meta-bar stays compact vertically */
+  .jasmine-card--meta-bar {
+    padding: var(--sp-md) 60px;
+  }
+
+  /* Two-col cards: keep standard padding (60px would be too dense at ~350px width) */
+  .jasmine-two-col .jasmine-card {
+    padding: var(--sp-lg);
+  }
+}
+
+/* Default hover: subtle border brightening */
 .jasmine-card:hover {
   border-color: rgba(212, 168, 83, 0.38);
 }
 
-/* Tagline card — breathing predator pulse on the left border */
-@keyframes jasPredatorPulse {
-  0%, 100% {
-    box-shadow:
-      0 4px 28px rgba(0, 0, 0, 0.5),
-      -4px 0 12px rgba(212, 168, 83, 0.05);
-  }
-  50% {
-    box-shadow:
-      0 4px 28px rgba(0, 0, 0, 0.5),
-      -4px 0 22px rgba(212, 168, 83, 0.20);
-  }
-}
-
+/* ── Bot Info card: plain card, NO hover highlight, NO pulse ── */
 .jasmine-card--tagline {
-  border-left: 3px solid var(--jas-gold);
-  animation: jasPredatorPulse 4.5s ease-in-out infinite;
+  /* No left border, no animation — treated as regular card */
 }
 
+/* Explicitly neutralise any inherited hover effect */
 .jasmine-card--tagline:hover {
-  border-color: var(--jas-gold);
+  border-color: var(--jas-border);
+  box-shadow:
+    0 4px 28px rgba(0, 0, 0, 0.5),
+    0 1px 0 rgba(255, 255, 255, 0.025) inset;
 }
 
 
@@ -420,9 +575,14 @@ body::before {
   border-bottom: 1px solid rgba(212, 168, 83, 0.18);
 }
 
+/* Compact section label inside meta-bar */
+.jasmine-card--meta-bar .jasmine-section-label {
+  margin-bottom: var(--sp-xs);
+}
+
 
 /* ============================================================
-   TAGLINE CARD — TEXT
+   BOT INFO TEXT (was tagline card text)
    ============================================================ */
 
 .jasmine-tagline-text {
@@ -437,10 +597,11 @@ body::before {
   color: rgba(232, 232, 232, 0.72);
 }
 
-.jasmine-tagline-text:last-of-type {
+.jasmine-tagline-text:last-child {
   margin-bottom: 0;
 }
 
+/* Keep tagline-hook for any remaining in-card usage */
 .jasmine-tagline-hook {
   font-family: var(--font-display);
   font-size: 1.15em;
@@ -543,7 +704,7 @@ body::before {
 
 
 /* ============================================================
-   META ROWS (Content / Genre / POV etc.)
+   META ROWS (legacy — kept for potential future use)
    ============================================================ */
 
 .jasmine-meta {
@@ -627,6 +788,10 @@ body::before {
     padding: var(--sp-md);
   }
 
+  .jasmine-card--meta-bar {
+    padding: var(--sp-sm) var(--sp-md);
+  }
+
   .jasmine-name {
     letter-spacing: 0.07em;
   }
@@ -640,7 +805,7 @@ body::before {
     min-width: unset;
   }
 
-  /* Disable grain on mobile — performance */
+  /* Disable film grain on mobile — performance */
   .jasmine-wrapper::before {
     display: none;
   }
