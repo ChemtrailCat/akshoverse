@@ -1,12 +1,16 @@
+/* Fonts imported here — keeps creator notes to a single <style> import */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Josefin+Sans:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap');
+
 /* ============================================================
    JASMINE THANAN — SIAMESE WHISPER THEME
    Bangkok Hotel Elegance x Predator Aesthetic
-   Author: chemtrailcat | Version: 3.0
+   Author: chemtrailcat | Version: 3.1
    Repo: https://github.com/ChemtrailCat/akshoverse
    v2.0: +hero image layer, +animated ambient glow,
          +film grain overlay, +entrance animations
    v3.0: layout reorder, two-col, meta-bar, button styles,
          avatar shimmer, 50% desktop card sizing
+   v3.1: fonts moved into CSS (removes extra load step from creator notes)
    ============================================================ */
 
 
