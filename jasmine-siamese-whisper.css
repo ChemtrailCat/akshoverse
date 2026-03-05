@@ -107,13 +107,16 @@ h4.ant-typography.mt-8 + div {
 
 /* ============================================================
    CHUB ACTION BUTTONS — Gold theme, black icon/text
-   Targeted via stable icon classes using :has()
+   High-specificity selectors to beat Ant Design CSS-in-JS
    ============================================================ */
 
-button:has(.lucide-messages-square),
-button:has(.anticon-upload),
-button:has(.anticon-download) {
+/* Base: all action buttons (high specificity + fallback) */
+button.ant-btn:has(.lucide-messages-square),
+button.ant-btn:has(.anticon-upload),
+button.ant-btn:has(.anticon-download),
+button.ant-btn.ant-btn-block {
   background: var(--jas-gold) !important;
+  background-color: var(--jas-gold) !important;
   border-color: var(--jas-gold-dark) !important;
   color: #000 !important;
   font-family: var(--font-ui) !important;
@@ -125,19 +128,16 @@ button:has(.anticon-download) {
     transform   0.15s ease !important;
 }
 
-/* Icon + text colour */
-button:has(.lucide-messages-square) *,
-button:has(.anticon-upload) *,
-button:has(.anticon-download) * {
+/* Icon + text colour (SVG uses stroke="currentColor") */
+button.ant-btn.ant-btn-block *,
+button.ant-btn.ant-btn-block svg {
   color: #000 !important;
-  fill: currentColor !important;
 }
 
 /* Hover: lighter gold + glow */
-button:has(.lucide-messages-square):hover,
-button:has(.anticon-upload):hover,
-button:has(.anticon-download):hover {
+button.ant-btn.ant-btn-block:hover {
   background: var(--jas-gold-light) !important;
+  background-color: var(--jas-gold-light) !important;
   border-color: var(--jas-gold) !important;
   box-shadow:
     0 0 18px rgba(212, 168, 83, 0.55),
@@ -146,7 +146,7 @@ button:has(.anticon-download):hover {
 }
 
 /* "Chat with" — slightly taller, larger font to stand out */
-button:has(.lucide-messages-square) {
+button.ant-btn.ant-btn-primary.ant-btn-block {
   padding-top:    10px !important;
   padding-bottom: 10px !important;
   font-size: 1.06em !important;
